@@ -1,0 +1,113 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  USER
+  COLLABORATOR
+}
+
+enum Category {
+  PERMIS_A
+  PERMIS_B  
+}
+
+model Users {
+  id                   String             @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  surname              String
+  email                String?            @unique
+  phone_number         String?            @unique
+  role                 Roles              @relation(fields: [roleId], references: [id])
+  roleId               String             @db.ObjectId
+  isEmailVerified      Boolean            @default(false)
+  isPhoneVerified      Boolean            @default(false)
+  password             String
+  otp                  UserOtp[]
+  UserTestResult       UserTestResult[]
+  UserExamResuslt      UserExamResuslt[]
+}
+
+model Otp {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  code      String
+  UserOtp   UserOtp[]
+}
+
+model UserOtp {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  otp       Otp      @relation(fields: [otpId], references: [id])
+  otpId     String   @db.ObjectId
+  user      Users    @relation(fields: [userId], references: [id])
+  userId     String  @db.ObjectId
+  createdAt DateTime @default(now())
+}
+
+model Roles {
+  id    String  @id @default(auto()) @map("_id") @db.ObjectId
+  role  Role    @unique
+  users Users[]
+}
+
+model Course {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  subtitle     String?
+  category     Category
+  chapter      String
+  url          String?
+}
+
+model Question {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  options     String[]
+  title       String
+  imageUrl    String?
+  correct     String[]
+  category    Category
+  chapter     String
+}
+
+model Exam {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  questions   String[]
+  category    Category
+  chapter     String
+  UserExamResuslt UserExamResuslt[]
+}
+
+model Test {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  questions   Json
+  category    Category
+  chapter     String
+  UserTestResult UserTestResult[]
+}
+
+model UserTestResult {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  user        Users     @relation(fields: [userId], references: [id])
+  userId      String    @db.ObjectId
+  test        Test      @relation(fields: [testId], references: [id])
+  testId      String    @db.ObjectId
+  note        Float
+  result      String[]
+  createdAt   DateTime  @default(now())
+}
+
+model UserExamResuslt {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  user        Users     @relation(fields: [userId], references: [id])
+  userId      String    @db.ObjectId
+  exam        Exam      @relation(fields: [examId], references: [id])
+  examId      String    @db.ObjectId
+  note        Float
+  result      String[]
+  createdAt   DateTime  @default(now())
+}
