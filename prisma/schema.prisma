@@ -18,6 +18,12 @@ enum Category {
   PERMIS_B  
 }
 
+enum TypeCourse {
+  VIDEO
+  AUDIO
+  TEXT  
+}
+
 model Users {
   id                   String             @id @default(auto()) @map("_id") @db.ObjectId
   name                 String
@@ -61,6 +67,7 @@ model Course {
   subtitle     String?
   category     Category
   chapter      String
+  // type         TypeCourse
   url          String?
 }
 
@@ -97,7 +104,7 @@ model UserTestResult {
   test        Test      @relation(fields: [testId], references: [id])
   testId      String    @db.ObjectId
   note        Float
-  result      String[]
+  date        String    // Utiliser une chaîne de caractères pour la date
   createdAt   DateTime  @default(now())
 }
 
@@ -109,5 +116,6 @@ model UserExamResuslt {
   examId      String    @db.ObjectId
   note        Float
   result      String[]
+  date        DateTime
   createdAt   DateTime  @default(now())
 }

@@ -68,6 +68,9 @@ router.get('/user-test-results/:userTestResultId', userTestResultCtrl.getUserTes
  *               note:
  *                 type: float
  *                 description: Note du test
+ *               date:
+ *                 type: Datetime
+ *                 description: Date de composition
  *               result:
  *                 type: array
  *                 items:
@@ -105,11 +108,7 @@ router.post('/user-test-results', userTestResultCtrl.createUserTestResult);
  *               note:
  *                 type: float
  *                 description: Nouvelle note du test
- *               result:
- *                 type: array
- *                 items:
- *                   type: string
- *                 description: Nouveau résultat du test
+ 
  *     responses:
  *       200:
  *         description: User test result updated successfully

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const userExamResultCtrl = require('../controllers/userExamResultController');
+const userExamResultCtrl = require('../controlleurs/userResultExam.controlleur');
 
 /**
  * @swagger
@@ -65,6 +65,9 @@ router.get('/userExamResults/:userExamResultId', userExamResultCtrl.getUserExamR
  *               examId:
  *                 type: string
  *                 description: ID de l'examen
+ *               date:
+ *                 type: Datetime
+ *                 description: Date de composition
  *               note:
  *                 type: number
  *                 description: Note de l'examen

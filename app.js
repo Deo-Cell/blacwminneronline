@@ -27,6 +27,8 @@ const coursRoutes = require("./routes/cours");
 const examRoutes = require("./routes/exam");
 const qcmRoutes = require("./routes/qcm");
 const testRoutes = require("./routes/test");
+const ResultTestRoutes = require("./routes/resultTest");
+const ResultExamRoutes = require("./routes/ResultExam");
 
 
 // Add this middleware to enable CORS
@@ -45,6 +47,8 @@ app.use("/", examRoutes);
 app.use("/", qcmRoutes);
 app.use("/", testRoutes);
 app.use("/", rolesRoutes);
+app.use("/", ResultExamRoutes);
+app.use("/", ResultTestRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);

@@ -31,12 +31,13 @@ exports.getUserExamResultById = async (req, res) => {
 // Fonction pour créer un nouveau résultat d'examen utilisateur
 exports.createUserExamResult = async (req, res) => {
   try {
-    const { userId, examId, note, result } = req.body;
+    const { userId, examId, note, date, result } = req.body;
 
     const newUserExamResult = await prisma.userExamResult.create({
       data: {
         user: { connect: { id: userId } },
         exam: { connect: { id: examId } },
+        date,
         note,
         result,
       },

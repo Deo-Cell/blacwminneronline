@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-
+const { DateTime } = require('luxon');
 // Fonction pour récupérer tous les résultats des tests des utilisateurs
 exports.getAllUserTestResults = async (req, res) => {
   try {
@@ -29,14 +29,26 @@ exports.getUserTestResultById = async (req, res) => {
 
 // Fonction pour créer un nouveau résultat de test utilisateur
 exports.createUserTestResult = async (req, res) => {
-  const { userId, testId, note, result } = req.body;
+  const { userId, testId, note, date } = req.body;
+  console.log('date:', date);
+  // Retirer les millisecondes de la date
+  const dateWithoutMilliseconds = date.replace(/\.\d{6}/, '');
+  
+  // Convertir la date en format Luxon DateTime
+  const luxonDate = DateTime.fromISO(dateWithoutMilliseconds);
+
+  // Formater la date en français
+  const formattedDate = luxonDate.setLocale('fr').toFormat('cccc d LLLL yyyy');
+
+  console.log('formattedDate:', formattedDate);
+  
   try {
     const newUserTestResult = await prisma.userTestResult.create({
       data: {
         user: { connect: { id: userId } },
         test: { connect: { id: testId } },
+        date: formattedDate,
         note,
-        result,
       },
     });
     res.status(201).json(newUserTestResult);
