@@ -15,6 +15,7 @@ exports.getAllUserTestResults = async (req, res) => {
 // Fonction pour récupérer les tests d'un utilisateur par son ID
 exports.getUserTestResultById = async (req, res) => {
   const { userId } = req.params;
+  console.log('userId:', userId);
   try {
     // Recherche de l'utilisateur dans la base de données
     const user = await prisma.users.findUnique({
