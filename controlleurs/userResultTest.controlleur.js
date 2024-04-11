@@ -12,18 +12,34 @@ exports.getAllUserTestResults = async (req, res) => {
   }
 };
 
-// Fonction pour récupérer les résultats d'un test d'utilisateur par son ID
+// Fonction pour récupérer les tests d'un utilisateur par son ID
 exports.getUserTestResultById = async (req, res) => {
-  const { userTestResultId } = req.params;
+  const { userId } = req.params;
   try {
-    const userTestResult = await prisma.userTestResult.findUnique({ where: { id: userTestResultId } });
-    if (!userTestResult) {
-      return res.status(404).json({ error: 'User test result not found' });
+    // Recherche de l'utilisateur dans la base de données
+    const user = await prisma.users.findUnique({
+      where: { id: userId },
+      include: {
+        UserTestResult: true // Inclure les résultats des tests associés à l'utilisateur
+      }
+    });
+
+    // Vérifier si l'utilisateur existe
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json(userTestResult);
+
+    if (user.UserTestResult.length === 0) {
+      return res.status(404).json({ Message: 'User dont have test yet' });
+    }
+
+    // Récupérer les résultats des tests de l'utilisateur
+    const userTests = user.UserTestResult;
+
+    res.status(200).json(userTests);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch user test result' });
+    res.status(500).json({ error: 'Failed to fetch user tests' });
   }
 };
 

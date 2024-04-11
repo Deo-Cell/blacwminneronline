@@ -25,25 +25,27 @@ router.get('/user-test-results', userTestResultCtrl.getAllUserTestResults);
 
 /**
  * @swagger
- * /user-test-results/{userTestResultId}:
+ * /user-test-results/{userId}:
  *   get:
- *     summary: Récupérer un résultat de test utilisateur par son ID
+ *     summary: Récupérer les résultat des tests d'un utilisateur par son ID
  *     tags: [UserTestResults]
- *     description: Récupère un résultat de test utilisateur en fonction de son ID.
+ *     description: Récupère les résultats de tous les tests éffectués pas un utilisateur en fonction de son ID.
  *     parameters:
  *       - in: path
- *         name: userTestResultId
+ *         name: userId
  *         required: true
- *         description: ID du résultat de test utilisateur à récupérer
+ *         description: ID de l'utilisateur
  *         schema:
  *           type: string
  *     responses:
  *       200:
  *         description: OK
  *       404:
- *         description: User test result not found
+ *         description: User not found or User dont have test yet
+ *       500:
+ *         description: Server error
  */
-router.get('/user-test-results/:userTestResultId', userTestResultCtrl.getUserTestResultById);
+router.get('/user-test-results/:userId', userTestResultCtrl.getUserTestResultById);
 
 /**
  * @swagger
@@ -108,7 +110,11 @@ router.post('/user-test-results', userTestResultCtrl.createUserTestResult);
  *               note:
  *                 type: float
  *                 description: Nouvelle note du test
- 
+ *               result:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Nouveau résultat du test
  *     responses:
  *       200:
  *         description: User test result updated successfully
